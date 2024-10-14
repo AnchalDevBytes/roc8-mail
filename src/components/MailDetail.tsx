@@ -12,8 +12,7 @@ const MailDetail = ({ mail } : { mail: MailMetaDataInterface }) => {
     const fetchMailDetail = async () => {
         try {
             const { data } : AxiosResponse<ApiResponse<MailInterface>> = await axios.get(`https://flipkart-email-mock.vercel.app/?id=${mail.id}`);
-            console.log("data", data);
-            setMailBody(data?.body);
+            setMailBody(data.body);
         } catch (error) {
             if(error instanceof Error) {
                 toast.error("Error while retrieving mail detail");
@@ -28,15 +27,20 @@ const MailDetail = ({ mail } : { mail: MailMetaDataInterface }) => {
     },[mail.id]);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md border-2 border-border">
-      <h2 className="text-lg font-bold">{mail?.subject}</h2>
-      <p className="text-gray-600 mb-4">
-        From: <span className="font-semibold">{mail?.from?.name}</span> &lt;{mail?.from?.email}&gt;
-      </p>
-      <p className="text-gray-600 mb-4">
-        {new Date(mail?.date).toLocaleDateString()} {new Date(mail?.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-      </p>
-      <p className="text-gray-800" dangerouslySetInnerHTML={{__html: mailBody || "No content available"}}></p>
+    <div className="bg-white px-2 md:px-5 lg:pr-14 py-8 rounded-lg flex gap-1 md:gap-5 shadow-md border-2 border-border">
+      <div className="h-8 w-8 md:h-12 md:w-12 flex items-center justify-center rounded-full bg-accent text-white font-bold">
+            {mail.from.name[0].toUpperCase()}
+      </div>
+      <div className='flex-1'>
+        <div className='flex justify-between'>
+          <h2 className="text-lg font-bold">{mail?.subject}</h2>
+          <button className='bg-accent px-4 py-1 rounded-3xl cursor-pointer hover:bg-accent/80 active:scale-95 transition-all ease-in-out text-xs font-semibold text-readBackground'>Mark as favorite</button>
+        </div>
+        <p className="text-gray-600 mt-2 mb-4">
+          {new Date(mail?.date).toLocaleDateString()} {new Date(mail?.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </p>
+        <div className="text-sm md:text-base text-gray-800 pr-5 lg:pr-2" dangerouslySetInnerHTML={{__html: mailBody || "No content available"}}></div>
+      </div>
     </div>
   )
 }

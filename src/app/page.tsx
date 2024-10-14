@@ -31,9 +31,13 @@ const HomePage = () => {
     setSelectedMail(mail);
   }
 
+  const handleBackClick = () => {
+    setSelectedMail(null);
+  };
+
   return (
-    <div className="flex items-center h-[80vh] overflow-y-scroll scrollbar-hide bg-background text-text mt-10 w-full">
-      <div className={`${selectedMail ? "w-1/2" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
+    <div className="flex flex-col lg:flex-row items-center h-[80vh] overflow-y-scroll scrollbar-hide bg-background text-text mt-10 w-full">
+      <div className={`${selectedMail ? "w-1/2 hidden lg:block" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
         {mails.length > 0 ? (
           <ul className="space-y-4 w-full">
             {mails.map((mail) => (
@@ -45,7 +49,15 @@ const HomePage = () => {
         )}
       </div>
       {selectedMail && (
-        <div className="w-1/2 ml-10 h-[80vh] overflow-y-scroll scrollbar-hide">
+        <div className="w-full lg:w-1/2 lg:ml-10 h-[80vh] overflow-y-scroll scrollbar-hide">
+          <div className="block lg:hidden">
+            <button 
+              className="mb-4 bg-accent text-white px-4 py-1 rounded-md" 
+              onClick={handleBackClick}
+            >
+              Back
+            </button>
+          </div>
           <MailDetail mail={selectedMail} />
         </div>
       )}
