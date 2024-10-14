@@ -14,7 +14,9 @@ const MailCard = ({
   return (
     <li 
         key={mail.id} 
-        className={`bg-white shadow-md p-4 rounded-lg flex gap-4 cursor-pointer w-full ${selectedMail?.id === mail.id ? "border-2 border-accent" : "border-2 border-border"}`}
+        className={`p-4 rounded-lg flex gap-4 cursor-pointer w-full 
+            ${selectedMail?.id === mail.id ? "border-2 border-accent" : "border-2 border-border"}
+            ${mail.isRead ? "bg-readBackground" : "bg-background"} shadow-md `}
         onClick={onClick}
     >
         <div className="h-12 w-12 flex items-center justify-center rounded-full bg-accent text-white font-bold">
@@ -30,7 +32,7 @@ const MailCard = ({
             <p className='text-xs text-gray-400'>
                 {new Date(mail.date).toLocaleDateString()} {new Date(mail.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
-            <p className='text-xs text-pink-500'>Favorite</p>
+            <p className='text-xs text-pink-500'>{mail.isFavorite && "Favorite"}</p>
         </span>
         </div>
     </li>

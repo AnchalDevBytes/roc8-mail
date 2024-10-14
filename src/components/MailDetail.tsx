@@ -41,7 +41,7 @@ const MailDetail = ({ mail, toggleFavorite } : { mail: MailMetaDataInterface; to
               { mail.isFavorite ? "unMark Favorite" : "Mark as favorite" }
           </button>
         </div>
-        <p className="text-gray-600 mt-2 mb-4">
+        <p className="text-gray-600 mt-2 mb-4"> 
           {new Date(mail?.date).toLocaleDateString()} {new Date(mail?.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </p>
         <div className="text-sm md:text-base text-gray-800 pr-5 lg:pr-2" dangerouslySetInnerHTML={{__html: mailBody || "No content available"}}></div>
