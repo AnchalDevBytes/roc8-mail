@@ -1,5 +1,5 @@
 "use client";
-import { MailCard, MailDetail } from '@/components';
+import { Header, MailCard, MailDetail } from '@/components';
 import { ApiResponse } from '@/interfaces';
 import { MailMetaDataInterface } from '@/interfaces/MailMetaDataInterface';
 import axios, { AxiosResponse } from 'axios';
@@ -9,11 +9,21 @@ import { toast } from 'react-toastify';
 const HomePage = () => {
   const [mails, setMails] = useState<MailMetaDataInterface[]>([]);
   const [selectedMail, setSelectedMail] = useState<MailMetaDataInterface | null>(null);
+  const [filteredMails, setFilteredMails] = useState<MailMetaDataInterface[]>([]);
+  const [filter, setFilter] = useState<string>("all");
 
   const fetchData = async () => {
     try {
       const { data: { list } } : AxiosResponse<ApiResponse<MailMetaDataInterface>> = await axios.get("https://flipkart-email-mock.vercel.app/");
-      setMails(list);
+
+      const mailsWithStatus = list.map((mail) => ({
+        ...mail,
+        isRead: false,
+        isFavorite: false,
+      }));
+
+      setMails(mailsWithStatus);
+      setFilteredMails(mailsWithStatus);
     } catch (error) {
       if(error instanceof Error) {
         toast.error("Error while retrieving mails");
@@ -27,7 +37,38 @@ const HomePage = () => {
     fetchData();
   },[]);
 
+  const filtersMails = () => {
+    let filtered = mails;
+    if(filter === "read") {
+      filtered = mails.filter((mail) => mail.isRead);
+    } else if(filter === "unread") {
+      filtered = mails.filter((mail) => !mail.isRead);
+    } else if(filter === "favorites") {
+      filtered = mails.filter((mail) => mail.isFavorite);
+    }
+    setFilteredMails(filtered);
+  };
+
+  useEffect(() => {
+    filtersMails();
+  },[filter, mails]);
+
+  const toggleFavorite = (mailId : string) => {
+    const updateMails = mails.map((mail) => (
+      mail.id === mailId ? { ...mail, isFavorite: !mail.isFavorite } : mail
+    ));
+    setMails(updateMails);
+  };
+
+  const markAsRead = (mailId: string) => {
+    const updatedMails = mails.map((mail) => (
+      mail.id === mailId ? { ...mail, isRead: true } : mail
+    ));
+    setMails(updatedMails);
+  };
+
   const handleMailClick = (mail: MailMetaDataInterface) => {
+    markAsRead(mail.id);
     setSelectedMail(mail);
   }
 
@@ -36,11 +77,13 @@ const HomePage = () => {
   };
 
   return (
+    <>
+    <Header setFilter={setFilter}/>
     <div className="flex flex-col lg:flex-row items-center h-[80vh] overflow-y-scroll scrollbar-hide bg-background text-text mt-10 w-full">
       <div className={`${selectedMail ? "w-1/2 hidden lg:block" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
-        {mails.length > 0 ? (
+        {filteredMails.length > 0 ? (
           <ul className="space-y-4 w-full">
-            {mails.map((mail) => (
+            {filteredMails.map((mail) => (
               <MailCard key={mail.id} mail={mail} onClick={() => handleMailClick(mail)} selectedMail={selectedMail} />
             ))}
           </ul>
@@ -58,10 +101,11 @@ const HomePage = () => {
               Back
             </button>
           </div>
-          <MailDetail mail={selectedMail} />
+          <MailDetail mail={selectedMail} toggleFavorite={() => toggleFavorite(selectedMail.id)} />
         </div>
       )}
     </div>
+    </>
   )
 }
 

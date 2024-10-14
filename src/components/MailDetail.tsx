@@ -6,7 +6,7 @@ import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 
-const MailDetail = ({ mail } : { mail: MailMetaDataInterface }) => {
+const MailDetail = ({ mail, toggleFavorite } : { mail: MailMetaDataInterface; toggleFavorite : () => void }) => {
     const [mailBody, setMailBody] = useState<string>("");
 
     const fetchMailDetail = async () => {
@@ -34,7 +34,12 @@ const MailDetail = ({ mail } : { mail: MailMetaDataInterface }) => {
       <div className='flex-1'>
         <div className='flex justify-between'>
           <h2 className="text-lg font-bold">{mail?.subject}</h2>
-          <button className='bg-accent px-4 py-1 rounded-3xl cursor-pointer hover:bg-accent/80 active:scale-95 transition-all ease-in-out text-xs font-semibold text-readBackground'>Mark as favorite</button>
+          <button 
+            className='bg-accent px-4 py-1 rounded-3xl cursor-pointer hover:bg-accent/80 active:scale-95 transition-all ease-in-out text-xs font-semibold text-readBackground'
+            onClick={toggleFavorite}
+          >
+              { mail.isFavorite ? "unMark Favorite" : "Mark as favorite" }
+          </button>
         </div>
         <p className="text-gray-600 mt-2 mb-4">
           {new Date(mail?.date).toLocaleDateString()} {new Date(mail?.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
