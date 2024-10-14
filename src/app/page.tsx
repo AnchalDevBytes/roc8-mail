@@ -1,5 +1,5 @@
 "use client";
-import { Header, MailCard, MailDetail } from '@/components';
+import { CardSkeleton, Header, MailCard, MailDetail } from '@/components';
 import { ApiResponse } from '@/interfaces';
 import { MailMetaDataInterface } from '@/interfaces/MailMetaDataInterface';
 import axios, { AxiosResponse } from 'axios';
@@ -125,8 +125,8 @@ const HomePage = () => {
     </div>
     <div className="flex flex-col lg:flex-row items-center h-[80vh] overflow-y-scroll scrollbar-hide bg-background text-text mt-10 w-full">
       {isLoading ? (
-        <div className="flex items-center justify-center h-full w-full tracking-widest text-3xl font-medium animate-pulse text-accent">
-          Loading...
+        <div className={`${selectedMail ? "w-1/2 hidden lg:block" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
+          <CardSkeleton/>
         </div>
       ) : currentMails.length > 0 ? (
             <div className={`${selectedMail ? "w-1/2 hidden lg:block" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
