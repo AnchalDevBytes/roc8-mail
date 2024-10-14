@@ -27,7 +27,7 @@ const MailDetail = ({ mail, toggleFavorite } : { mail: MailMetaDataInterface; to
     },[mail.id]);
 
   return (
-    <div className="bg-white px-2 md:px-5 lg:pr-14 py-8 rounded-lg flex gap-1 md:gap-5 shadow-md border-2 border-border">
+    <div className="bg-background px-2 md:px-5 lg:pr-14 py-8 rounded-lg flex gap-1 md:gap-5 shadow-md border-2 border-border">
       <div className="h-8 w-8 md:h-12 md:w-12 flex items-center justify-center rounded-full bg-accent text-white font-bold">
             {mail.from.name[0].toUpperCase()}
       </div>
