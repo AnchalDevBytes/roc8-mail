@@ -1,5 +1,4 @@
 "use client";
-import { ApiResponse } from '@/interfaces';
 import { MailInterface } from '@/interfaces/MailInterface';
 import { MailMetaDataInterface } from '@/interfaces/MailMetaDataInterface';
 import axios, { AxiosResponse } from 'axios';
@@ -11,7 +10,7 @@ const MailDetail = ({ mail, toggleFavorite } : { mail: MailMetaDataInterface; to
 
     const fetchMailDetail = async () => {
         try {
-            const { data } : AxiosResponse<ApiResponse<MailInterface>> = await axios.get(`https://flipkart-email-mock.vercel.app/?id=${mail.id}`);
+            const { data } : AxiosResponse<MailInterface> = await axios.get(`https://flipkart-email-mock.vercel.app/?id=${mail.id}`);
             setMailBody(data.body);
         } catch (error) {
             if(error instanceof Error) {
