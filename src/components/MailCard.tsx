@@ -16,7 +16,7 @@ const MailCard = ({
         key={mail.id} 
         className={`p-4 rounded-lg flex gap-4 cursor-pointer w-full 
             ${selectedMail?.id === mail.id ? "border-2 border-accent" : "border-2 border-border"}
-            ${mail.isRead ? "bg-readBackground" : "bg-background"} shadow-md `}
+            ${mail.isRead ? "bg-readBackground" : "bg-background shadow-md"}`}
         onClick={onClick}
     >
         <div className="h-12 w-12 flex items-center justify-center rounded-full bg-accent text-white font-bold">

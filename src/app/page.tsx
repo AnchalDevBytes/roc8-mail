@@ -14,12 +14,11 @@ const HomePage = () => {
   const [filter, setFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const mailsPerPage = 7;
 
-  const fetchData = async () => {
+  const fetchData = async (page: number) => {
     try {
       setIsLoading(true);
-      const { data: { list } } : AxiosResponse<ApiResponse<MailMetaDataInterface>> = await axios.get("https://flipkart-email-mock.vercel.app/");
+      const { data: { list } } : AxiosResponse<ApiResponse<MailMetaDataInterface>> = await axios.get(`https://flipkart-email-mock.vercel.app/?page=${page}`);
 
       const mailsWithStatus = list.map((mail) => ({
         ...mail,
@@ -41,8 +40,8 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    fetchData();
-  },[]);
+    fetchData(currentPage);
+  },[currentPage]);
 
   const filtersMails = () => {
     let filtered = mails;
@@ -58,7 +57,6 @@ const HomePage = () => {
 
   useEffect(() => {
     filtersMails();
-    setCurrentPage(1);
   },[filter, mails]);
 
   const toggleFavorite = (mailId : string) => {
@@ -87,9 +85,7 @@ const HomePage = () => {
     setSelectedMail(null);
   };
 
-  const startIndex = (currentPage - 1) * mailsPerPage;
-  const currentMails = filteredMails.slice(startIndex, (startIndex + mailsPerPage));
-  const totalPages = Math.ceil(filteredMails.length / mailsPerPage);
+  const totalPages = 2;
 
   const handleNextPage = () => {
     if(currentPage < totalPages) {
@@ -128,10 +124,10 @@ const HomePage = () => {
         <div className={`${selectedMail ? "w-1/2 hidden lg:block" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
           <CardSkeleton/>
         </div>
-      ) : currentMails.length > 0 ? (
+      ) : filteredMails.length > 0 ? (
             <div className={`${selectedMail ? "w-1/2 hidden lg:block" : "w-full"} h-[80vh] overflow-y-scroll scrollbar-hide`}>
               <ul className="space-y-4 w-full">
-                {currentMails.map((mail) => (
+                {filteredMails.map((mail) => (
                   <MailCard key={mail.id} mail={mail} onClick={() => handleMailClick(mail)} selectedMail={selectedMail} />
                 ))}
               </ul>
