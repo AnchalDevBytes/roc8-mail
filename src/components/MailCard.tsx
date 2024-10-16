@@ -19,7 +19,7 @@ const MailCard = ({
             ${mail.isRead ? "bg-readBackground" : "bg-background shadow-md"}`}
         onClick={onClick}
     >
-        <div className="h-12 w-12 flex items-center justify-center rounded-full bg-accent text-white font-bold">
+        <div className="h-8 w-8 md:h-12 md:w-12 flex items-center justify-center rounded-full bg-accent text-white font-bold">
             {mail.from.name[0].toUpperCase()}
         </div>
         <div className='flex-1'>
